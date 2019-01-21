@@ -20,7 +20,7 @@ public class Osero {
     int wall = 3;
 
     /**
-     * 初期盤面を準備する
+     * 初期盤面を準備するメソッド
      */
     public void prepare() {
         for (int x = 0; x < xnum; x++) {
@@ -42,7 +42,34 @@ public class Osero {
         board[4][5] = black;
         board[5][4] = black;
     }
+
+    /**
+     * オセロ盤面を表示する
+     */
+    public void show() {
+        System.out.println("    1  2  3  4  5  6  7  8  x");
+        for (int y = 0; y < ynum; y++) {
+            System.out.print(y);
+            for (int x = 0; x < xnum; x++) {
+                if (board[x][y] == 1) {
+                    System.out.print("● |");
+                } else if (board[x][y] == 2) {
+                    System.out.print("◯ |");
+                } else if (board[x][y] == 3) {
+                    System.out.print(" ＊");
+                } else {
+                    System.out.print("  |");
+                }
+            }
+            System.out.println();
+            System.out.println("　 +--+--+--+--+--+--+--+--+");
+        }
+        System.out.println("y");
+        System.out.println();
+    }
+
 }
+
 
 
 
