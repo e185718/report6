@@ -12,6 +12,8 @@ import java.util.Scanner;
  * int black; //黒コマ=2
  * int wall; //壁=3
  * int turn; //コマを置くプレイヤー
+ * int check[][]; //コマの周りの情報を得るためのリスト
+ * int count; //勝敗を決めた時+1する
  */
 public class Osero {
     int xnum = 10;
@@ -22,7 +24,8 @@ public class Osero {
     int black = 2;
     int wall = 3;
     int turn;
-    int che[][] = {{1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}};
+    int check[][] = {{1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}};
+    int count;
     Scanner sc = new Scanner(System.in);
 
     /**
@@ -89,7 +92,7 @@ public class Osero {
      */
     public void turn_play() {
         turn = 3 - turn;
-        if (turn == 2) {
+        if (turn == black) {
             System.out.println("黒の番");
 
         } else {
@@ -111,13 +114,13 @@ public class Osero {
                 System.out.println("ここには置けません");
                 continue;
             }
-            for (int i = 0; i < che.length; i++) {
+            for (int i = 0; i < check.length; i++) {
                 int a=0,b=0,h,g,f=0;
-                h = che[i][0];
-                g = che[i][1];
+                h = check[i][0];
+                g = check[i][1];
                 while (true) {
-                    a += che[i][0];
-                    b += che[i][1];
+                    a += check[i][0];
+                    b += check[i][1];
                     f += 1;
                     if (board[s + a][c + b] == 3 - turn) {
                         if (board[s + a + h][c + b + g] == turn) {
@@ -141,6 +144,64 @@ public class Osero {
             }
         }
         System.out.println("ターン終了");
+    }
+
+    /**
+     * コマを置けない時にプレイヤーにパスをさせるメソッド
+     */
+    public void pass(){
+        for (int x=0;x < xnum;x ++){
+            for (int y =0;y < ynum;y++){
+                if(board[x][y] == 0) {
+                    for (int i = 0; i < check.length; i++) {
+                        int a = 0, b = 0, h, g;
+                        h = check[i][0];
+                        g = check[i][1];
+                        while (true) {
+                            a += check[i][0];
+                            b += check[i][1];
+                            if (board[x + a][y + b] == 3 - turn) {
+                                if (board[x + a + h][y + b + g] == turn) {
+                                    return;
+                                } else if(board[x + a + h][y + b + g] == 3 - turn){
+                                    continue;
+                                }
+                            }else{
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("コマを置けません");
+        System.out.println("パスします");
+        turn_play();
+    }
+    /**
+     * 勝敗を判定するメソッド
+     */
+    public void juage(){
+        int kuro = 0;
+        int siro = 0;
+        for (int y = 0;y < ynum;y++) {
+            for (int x = 0; x < xnum; x++) {
+                if (board[x][y] == white) {
+                    siro += 1;
+                } else if (board[x][y] == black) {
+                    kuro += 1;
+                }
+            }
+        }
+        if(siro + kuro == 8*8 || siro == 0 || kuro == 0) {
+            if (siro > kuro) {
+                System.out.println("白の勝ち");
+                count += 1;
+            }else if(kuro > siro){
+                System.out.println("黒の勝ち");
+                count += 1;
+            }
+        }
     }
 }
 
