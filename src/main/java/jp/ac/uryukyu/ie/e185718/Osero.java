@@ -51,11 +51,11 @@ public class Osero {
         for (int y = 0; y < ynum; y++) {
             System.out.print(y);
             for (int x = 0; x < xnum; x++) {
-                if (board[x][y] == 1) {
+                if (board[x][y] == white) {
                     System.out.print("● |");
-                } else if (board[x][y] == 2) {
+                } else if (board[x][y] == black) {
                     System.out.print("◯ |");
-                } else if (board[x][y] == 3) {
+                } else if (board[x][y] == wall) {
                     System.out.print(" ＊");
                 } else {
                     System.out.print("  |");
@@ -66,6 +66,16 @@ public class Osero {
         }
         System.out.println("y");
         System.out.println();
+    }
+
+    /**
+     * コマをセットするメソッド
+     * @param x　x軸
+     * @param y　y軸
+     * @param coma　コマの種類
+     */
+    public void coma_set(int x, int y, int coma) {
+        board[x][y] = coma;
     }
 
 }
