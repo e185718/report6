@@ -1,5 +1,7 @@
 package jp.ac.uryukyu.ie.e185718;
 
+import java.util.Scanner;
+
 /**
  * Solveクラス
  * int xnum; //盤のx軸の数
@@ -9,6 +11,7 @@ package jp.ac.uryukyu.ie.e185718;
  * int White; //白コマ=1
  * int black; //黒コマ=2
  * int wall; //壁=3
+ * int turn; //コマを置くプレイヤー
  */
 public class Osero {
     int xnum = 10;
@@ -18,6 +21,9 @@ public class Osero {
     int white = 1;
     int black = 2;
     int wall = 3;
+    int turn;
+    int che[][] = {{1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}};
+    Scanner sc = new Scanner(System.in);
 
     /**
      * 初期盤面を準備するメソッド
@@ -72,12 +78,70 @@ public class Osero {
      * コマをセットするメソッド
      * @param x　x軸
      * @param y　y軸
-     * @param coma　コマの種類
+     * @param koma　コマの種類
      */
-    public void coma_set(int x, int y, int coma) {
-        board[x][y] = coma;
+    public void koma_set(int x, int y, int koma) {
+        board[x][y] = koma;
     }
 
+    /**
+     * コマを置くプレイヤーを決める
+     */
+    public void turn_play() {
+        turn = 3 - turn;
+        if (turn == 2) {
+            System.out.println("黒の番");
+
+        } else {
+            System.out.println("白の番");
+        }
+    }
+
+    /**
+     * コマを入力してそこに置けるかどうかチェックする
+     */
+    public void koma_check() {
+        int d = 0;
+        while (d == 0) {
+            System.out.print("xを入力：");
+            int s = sc.nextInt();
+            System.out.print("yを入力：");
+            int c = sc.nextInt();
+            if (board[s][c] != space) {
+                System.out.println("ここには置けません");
+                continue;
+            }
+            for (int i = 0; i < che.length; i++) {
+                int a=0,b=0,h,g,f=0;
+                h = che[i][0];
+                g = che[i][1];
+                while (true) {
+                    a += che[i][0];
+                    b += che[i][1];
+                    f += 1;
+                    if (board[s + a][c + b] == 3 - turn) {
+                        if (board[s + a + h][c + b + g] == turn) {
+                            for(int j=0;j <= f;j++) {
+                                koma_set(s + j*h,c + j*g, turn);
+                            }
+                            show();
+                            d += 1;
+                            break;
+
+                        }else if (board[s + a + h][c + b + g] == 3 - turn){
+                            continue;
+                        }
+                    }else {
+                        break;
+                    }
+                }
+            }
+            if (d == 0) {
+                System.out.println("ここには置けません");
+            }
+        }
+        System.out.println("ターン終了");
+    }
 }
 
 
