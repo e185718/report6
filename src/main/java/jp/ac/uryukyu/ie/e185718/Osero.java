@@ -28,6 +28,10 @@ public class Osero {
     int count;
     Scanner sc = new Scanner(System.in);
 
+    public Osero(int turn) {
+        this.turn = turn;
+    }
+
     /**
      * 初期盤面を準備するメソッド
      */
@@ -42,8 +46,8 @@ public class Osero {
             board[x][9] = wall;
         }
         for (int y = 0; y < ynum; y++) {
-            board[0][y] = black;
-            board[9][y] = black;
+            board[0][y] = wall;
+            board[9][y] = wall;
 
         }
         board[4][4] = white;
@@ -202,6 +206,21 @@ public class Osero {
                 count += 1;
             }
         }
+    }
+
+    /**
+     * オセロを行うプレイメソッド
+     */
+    public void play(){
+        prepare();
+        show();
+        while (count == 0 ) {
+            turn_play();
+            pass();
+            koma_check();
+            juage();
+        }
+
     }
 }
 
